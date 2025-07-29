@@ -1,0 +1,15 @@
+exchange: 'binance'
+symbol: 'BTC/USDT'
+timeframe: '1h'
+mode: 'backtest'  # Options: 'real-time', 'backtest'
+
+strategy:
+  name: 'RsiStrategy'
+  params:
+    rsi_period: 14
+    rsi_overbought: 70
+    rsi_oversold: 30
+
+api_keys:
+  api_key: ''  # Your API key here
+  secret_key: ''  # Your secret key here

@@ -1,0 +1,9 @@
+ccxt==4.1.13
+pandas==2.1.4
+pandas-ta==0.3.14b
+numpy==1.26.3
+scikit-learn==1.4.0
+backtesting==0.17.1
+streamlit==1.30.0
+pyyaml==6.0.1
+tenacity==8.2.3
