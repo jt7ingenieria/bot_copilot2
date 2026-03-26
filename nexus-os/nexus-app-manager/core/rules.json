@@ -1,0 +1,21 @@
+{
+  "AutoCAD": "vm",
+  "Photoshop": "vm",
+  "Premiere": "vm",
+  "AfterEffects": "vm",
+  "Affinity Photo": "vm",
+  "Affinity Designer": "vm",
+  "Revit": "vm",
+  "SOLIDWORKS": "vm",
+  "Office 365": "wine",
+  "Notepad++": "wine",
+  "VSCode": "native",
+  "Chrome": "native",
+  "Brave": "native",
+  "Firefox": "native",
+  "Canva": "web",
+  "Perplexity": "web",
+  "ChatGPT": "web",
+  "Google Docs": "web",
+  "Gmail": "web"
+}
