@@ -1,0 +1,43 @@
+{
+  "project": "NEXUS OS",
+  "version": "1.0",
+  "language": "es",
+  "description": "Distribución Linux basada en Debian diseñada para compatibilidad con Windows, alto rendimiento adaptativo e IA integrada.",
+  "architecture": {
+    "base": "Debian Bookworm",
+    "kernel": "Zen Kernel",
+    "ui": {
+      "high_end": "KDE Plasma",
+      "low_end": "XFCE"
+    }
+  },
+  "modules": {
+    "nexus_ai_core": {
+      "path": "nexus-ai-core/",
+      "features": ["Local AI (Ollama)", "Cloud AI (OpenRouter/Premium)", "Task Routing"]
+    },
+    "nexus_app_manager": {
+      "path": "nexus-app-manager/",
+      "features": ["Native", "Wine", "KVM Virtualization", "Web PWA"]
+    },
+    "nexus_control_center": {
+      "path": "nexus-control-center/",
+      "tech_stack": ["Flask", "HTML5", "CSS3", "JS"]
+    }
+  },
+  "automation_scripts": [
+    "scripts/build_iso.sh",
+    "scripts/hardware_detect.sh",
+    "scripts/adaptive_install.sh",
+    "scripts/wine_setup.sh",
+    "scripts/install_ai.sh",
+    "scripts/vm_windows.sh"
+  ],
+  "installer": "Calamares",
+  "documentation": [
+    "docs/README.md",
+    "docs/INSTALL.md",
+    "docs/ARCHITECTURE.md",
+    "docs/REQUIREMENTS.md"
+  ]
+}

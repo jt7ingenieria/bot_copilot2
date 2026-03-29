@@ -1,8 +1,12 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 import subprocess
 import os
 
 app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return send_from_directory("../../ui", "index.html")
 
 @app.route("/api/system/info")
 def system_info():
