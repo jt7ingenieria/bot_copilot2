@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Control Center - Centro de Control Inteligente</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0d1117; color: #c9d1d9; margin: 0; padding: 0; }
+        .sidebar { width: 250px; background-color: #161b22; position: fixed; height: 100%; padding: 20px; border-right: 1px solid #30363d; }
+        .main-content { margin-left: 270px; padding: 40px; }
+        .card { background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 30px; }
+        h1, h2 { color: #ffffff; }
+        .btn { background-color: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .btn:hover { background-color: #005a9e; }
+        .btn-secondary { background-color: #30363d; margin-left: 10px; }
+        .status-badge { display: inline-block; padding: 5px 12px; border-radius: 12px; font-size: 0.8rem; margin-top: 5px; }
+        .status-online { background-color: #238636; color: white; }
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 20px; }
+        .app-card { background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .app-card:hover { border-color: #0078d4; transform: translateY(-5px); background-color: #1c2128; }
+        .app-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+        .ai-chat { border: 1px solid #30363d; border-radius: 12px; height: 350px; padding: 20px; overflow-y: auto; background-color: #0d1117; margin-top: 20px; display: flex; flex-direction: column; }
+        .chat-msg { margin-bottom: 15px; padding: 12px 18px; border-radius: 12px; max-width: 80%; }
+        .msg-user { align-self: flex-end; background-color: #0078d4; color: white; border-bottom-right-radius: 2px; }
+        .msg-ai { align-self: flex-start; background-color: #30363d; color: #c9d1d9; border-bottom-left-radius: 2px; }
+        .chat-input { display: flex; margin-top: 15px; }
+        .chat-input input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #30363d; background-color: #161b22; color: white; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>🌀 Linux Nexus-Win</h2>
+        <p>Dashboard v1.0</p>
+        <hr style="border-color: #30363d; margin: 20px 0;">
+        <p>CPU: <span id="cpu-stat">Cargando...</span></p>
+        <p>RAM: <span id="ram-stat">Cargando...</span></p>
+        <p>Modo: <span id="mode-stat" class="status-badge status-online">Cargando...</span></p>
+        <br>
+        <button class="btn" style="width: 100%;" onclick="toggleMode()">Cambiar a Modo Ligero</button>
+    </div>
+
+    <div class="main-content">
+        <h1>Centro de Control Nexus</h1>
+
+        <div class="card">
+            <h2>🚀 Lanzador de Aplicaciones Inteligente</h2>
+            <div class="app-grid">
+                <div class="app-card" onclick="launch('AutoCAD')">
+                    <span class="app-icon">🏗️</span>
+                    AutoCAD (VM)
+                </div>
+                <div class="app-card" onclick="launch('Photoshop')">
+                    <span class="app-icon">🎨</span>
+                    Adobe Photoshop (VM)
+                </div>
+                <div class="app-card" onclick="launch('Canva')">
+                    <span class="app-icon">✨</span>
+                    Canva (Web)
+                </div>
+                <div class="app-card" onclick="launch('VSCode')">
+                    <span class="app-icon">💻</span>
+                    VS Code (Nativo)
+                </div>
+                <div class="app-card" onclick="launch('Office 365')">
+                    <span class="app-icon">📄</span>
+                    Office 365 (Wine)
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🤖 Nexus AI Core - Asistente Personal</h2>
+            <div class="ai-chat" id="chat-container">
+                <div class="chat-msg msg-ai">Hola, soy la IA de Linux Nexus-Win. ¿En qué puedo ayudarte hoy?</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="ai-input" placeholder="Pregunta algo al sistema..." onkeypress="if(event.key==='Enter') sendAI()">
+                <button class="btn btn-secondary" onclick="sendAI()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Actualizar estadísticas del sistema cada 5 segundos
+        async function updateStats() {
+            try {
+                const res = await fetch('/api/system/info');
+                const data = await res.json();
+                document.getElementById('cpu-stat').innerText = data.cpu || 'N/A';
+                document.getElementById('ram-stat').innerText = data.ram || 'N/A';
+                document.getElementById('mode-stat').innerText = data.mode || 'N/A';
+            } catch (e) { console.error('Error al actualizar stats'); }
+        }
+
+        async function launch(appName) {
+            await fetch('/api/launch', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({app: appName})
+            });
+            alert('Enviada señal de inicio para ' + appName);
+        }
+
+        async function sendAI() {
+            const input = document.getElementById('ai-input');
+            const prompt = input.value;
+            if(!prompt) return;
+
+            const chat = document.getElementById('chat-container');
+            chat.innerHTML += `<div class="chat-msg msg-user">${prompt}</div>`;
+            input.value = '';
+
+            try {
+                const res = await fetch('/api/ai/ask', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({prompt: prompt})
+                });
+                const data = await res.json();
+                chat.innerHTML += `<div class="chat-msg msg-ai">${data.response}</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            } catch (e) {
+                chat.innerHTML += `<div class="chat-msg msg-ai">⚠️ Error al conectar con el motor de IA.</div>`;
+            }
+        }
+
+        async function toggleMode() {
+            const currentMode = document.getElementById('mode-stat').innerText;
+            const newMode = currentMode === 'HIGH_END' ? 'LOW_END' : 'HIGH_END';
+            await fetch('/api/system/set-mode', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({mode: newMode})
+            });
+            updateStats();
+        }
+
+        setInterval(updateStats, 5000);
+        updateStats();
+    </script>
+</body>
+</html>
