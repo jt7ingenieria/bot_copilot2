@@ -1,0 +1,8 @@
+{
+  "mode": "auto",
+  "local_ai": true,
+  "cloud_ai": true,
+  "privacy": true,
+  "preferred_local_model": "llama3",
+  "auto_switch_threshold": "technical"
+}
